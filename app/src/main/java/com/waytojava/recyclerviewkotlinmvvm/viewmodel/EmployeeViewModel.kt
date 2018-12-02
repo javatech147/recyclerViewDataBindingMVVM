@@ -43,8 +43,6 @@ class EmployeeViewModel : ViewModel {
         employeeList!!.add(employee4)
 
         employeeLiveData.value = employeeList
-
-
         return employeeLiveData
     }
 }

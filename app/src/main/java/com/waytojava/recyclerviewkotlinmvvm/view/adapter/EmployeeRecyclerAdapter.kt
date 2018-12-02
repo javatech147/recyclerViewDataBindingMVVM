@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.waytojava.recyclerviewkotlinmvvm.R
 import com.waytojava.recyclerviewkotlinmvvm.databinding.EmployeeBinding
@@ -12,11 +13,14 @@ import com.waytojava.recyclerviewkotlinmvvm.viewmodel.EmployeeViewModel
 /**
  * Created by Manish Kumar on 12/2/2018
  */
+
 class EmployeeRecyclerAdapter(
     private val context: Context,
     private val employeeArrayList: List<EmployeeViewModel>
 ) :
     RecyclerView.Adapter<EmployeeRecyclerAdapter.EmployeeViewHolder>() {
+
+    lateinit var onEmployeeItemClickListener: OnEmployeeListItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -32,6 +36,9 @@ class EmployeeRecyclerAdapter(
     override fun onBindViewHolder(viewHolder: EmployeeViewHolder, position: Int) {
         var employeeViewModel = employeeArrayList[position]
         viewHolder.bind(employeeViewModel)
+        viewHolder.employeeBinding.singleItemLayout.setOnClickListener{
+            onEmployeeItemClickListener!!.onEmployeeListItemClickListener(it, employeeViewModel)
+        }
     }
 
 
@@ -40,5 +47,13 @@ class EmployeeRecyclerAdapter(
             this.employeeBinding.employeeViewModel = employeeViewModel
             employeeBinding.executePendingBindings()
         }
+    }
+
+    fun setOnEmployeeListItemClickListener(onEmployeeListItemClickListener: OnEmployeeListItemClickListener) {
+        this.onEmployeeItemClickListener = onEmployeeListItemClickListener
+    }
+
+    interface OnEmployeeListItemClickListener {
+        fun onEmployeeListItemClickListener(view:View, employeeViewModel: EmployeeViewModel)
     }
 }
